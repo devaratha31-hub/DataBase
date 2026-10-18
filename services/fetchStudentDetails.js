@@ -28,10 +28,16 @@ export async function fetchStudentDetails(studentId, password) {
     if (!baseUrl) {
         throw new Error("VIIT_DETAILS_API is not configured");
     }
-
+    const proxyKey = process.env.PROXY_KEY;
+    if (!proxyKey) {
+        throw new Error("PROXY_KEY is not configured");
+    }
     try {
         const { data } = await axios.get(baseUrl, {
             params: { student_id: studentId, password },
+             headers: {
+                "X-Proxy-Key": proxyKey,
+            },
         });
 
         if (!data?.bio) {
